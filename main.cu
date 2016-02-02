@@ -131,7 +131,7 @@ int main(int argc, char * argv[])
     printf("-----------------------------------------\n");
     printf("CSR balance v3:\n");
 	spmv_csr_serial(&csr,cpu_result);
-    gpu_time=spmv_balance_csr_cuda_v3(&csr,Y);
+    gpu_time=spmv_lsrb_csr_cuda_v3(&csr,Y);
     printf("checksum=%f\n",check_sum(csr.ptrlen-1,Y,cpu_result));
 #ifdef TIMING
     printf("gpu time= %f ms,bandwidth=%f GB/s,gflops=%f\n"
@@ -140,7 +140,7 @@ int main(int argc, char * argv[])
     printf("-----------------------------------------\n");
     printf("CSR balance v3 double:\n");
 	spmv_csr_serial_double(&csr,cpu_result_double);
-    gpu_time=spmv_balance_csr_cuda_v3_double(&csr,Y_double);
+    gpu_time=spmv_lsrb_csr_cuda_v3_double(&csr,Y_double);
     printf("checksum=%f\n",check_sum_double(csr.ptrlen-1,Y_double,cpu_result_double));
 #ifdef TIMING
     printf("gpu time= %f ms,bandwidth=%f GB/s,gflops=%f\n"

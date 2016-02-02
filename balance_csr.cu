@@ -17,7 +17,7 @@ __device__ uint32_t inwarp_scan_v3(uint32_t in,int idInWarp)
     }
     return in;
 }
-__global__ void spmv_balance_csr_gpu_v3(int num_blocks_per_warp,
+__global__ void spmv_lsrb_csr_gpu_v3(int num_blocks_per_warp,
 	int num_warps,int num_rows,
 	const uint32_t * block_base, const uint32_t *bit_map, const int * seg_offset,
 	const float * in, const int * indices,const float *dev_x,
@@ -376,7 +376,7 @@ void get_rows_hist(int num_warps,uint32_t * bit_maps, int * bins)
 	}	
 }
 
-float spmv_balance_csr_cuda_v3(CSR * csr, float * y)
+float spmv_lsrb_csr_cuda_v3(CSR * csr, float * y)
 {
 	//test
 	//spmv_balance_csr_cuda_v3_test(csr,y);
@@ -514,7 +514,7 @@ float spmv_balance_csr_cuda_v3(CSR * csr, float * y)
 #endif
 	for(int i=0;i<NUM_RUN;i++)
 	{
-		spmv_balance_csr_gpu_v3<<<dimGrid,dimBlock>>>(
+		spmv_lsrb_csr_gpu_v3<<<dimGrid,dimBlock>>>(
 			num_blocks_per_warp,
 			num_warps,
 			ptrlen-1,	
@@ -542,7 +542,7 @@ float spmv_balance_csr_cuda_v3(CSR * csr, float * y)
 		//get the correct result
 	
 	cudaMemset(dev_y,0,num_rows*sizeof(float));
-	spmv_balance_csr_gpu_v3<<<dimGrid,dimBlock>>>(
+	spmv_lsrb_csr_gpu_v3<<<dimGrid,dimBlock>>>(
 			num_blocks_per_warp,
 			num_warps,
 			ptrlen-1,	
@@ -605,7 +605,7 @@ __device__ double atomicAdd_double(double* address, double val)
     return __longlong_as_double(old);
 }
 
-__global__ void spmv_balance_csr_gpu_v3_double(int num_blocks_per_warp,
+__global__ void spmv_lsrb_csr_gpu_v3_double(int num_blocks_per_warp,
 	int num_warps,int num_rows,
 	const uint32_t * block_base, const uint32_t *bit_map, const int * seg_offset,
 	const double * in, const int * indices,const double *dev_x,
@@ -753,7 +753,7 @@ __global__ void spmv_balance_csr_gpu_v3_double(int num_blocks_per_warp,
 	}
 }
 
-float spmv_balance_csr_cuda_v3_double(CSR * csr, double * y)
+float spmv_lsrb_csr_cuda_v3_double(CSR * csr, double * y)
 {
 	//test
 	//spmv_balance_csr_cuda_v3_test(csr,y);
@@ -899,7 +899,7 @@ float spmv_balance_csr_cuda_v3_double(CSR * csr, double * y)
 #endif
 	for(int i=0;i<NUM_RUN;i++)
 	{
-		spmv_balance_csr_gpu_v3_double<<<dimGrid,dimBlock>>>(
+		spmv_lsrb_csr_gpu_v3_double<<<dimGrid,dimBlock>>>(
 			num_blocks_per_warp,
 			num_warps,
 			ptrlen-1,	
@@ -927,7 +927,7 @@ float spmv_balance_csr_cuda_v3_double(CSR * csr, double * y)
 		//get the correct result
 	
 	cudaMemset(dev_y,0,num_rows*sizeof(double));
-	spmv_balance_csr_gpu_v3_double<<<dimGrid,dimBlock>>>(
+	spmv_lsrb_csr_gpu_v3_double<<<dimGrid,dimBlock>>>(
 			num_blocks_per_warp,
 			num_warps,
 			ptrlen-1,	
