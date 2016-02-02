@@ -502,7 +502,7 @@ float spmv_lsrb_csr_cuda_v3(CSR * csr, float * y)
 	get_seg_offset_time=(float)get_seg_offset_timer.stop();
 #endif
 	printf("Get bit_map seg_offset time=%f ms\n",get_seg_offset_time);
-	printf("csr->csr_balance time=%f ms\n",block_base_time
+	printf("csr->lsrb_csr time=%f ms\n",block_base_time
 		+get_seg_offset_time);
 	CUT_CHECK_ERROR("kernel error format convert:");
 	
@@ -889,7 +889,7 @@ float spmv_lsrb_csr_cuda_v3_double(CSR * csr, double * y)
 	get_seg_offset_time=(float)get_seg_offset_timer.stop();
 #endif
 	printf("Get bit_map seg_offset time=%f ms\n",get_seg_offset_time);
-	printf("csr->csr_balance time=%f ms\n",block_base_time
+	printf("csr->lsrb_csr time=%f ms\n",block_base_time
 		+get_seg_offset_time);
 	CUT_CHECK_ERROR("kernel error format convert:");
 	
