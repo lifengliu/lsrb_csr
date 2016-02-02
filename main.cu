@@ -34,6 +34,9 @@ float getFLOP(int nnz)
     return (float)(2 * nnz);
 }
 
+/*
+Calculate check sum between GPU result and CPU result
+*/
 float check_sum(int num_rows,
                 float* y,
                 float* true_result)
@@ -54,6 +57,10 @@ float check_sum(int num_rows,
     }
     return sum;
 }
+
+/*
+Calculate check sum between GPU result and CPU result
+*/
 double check_sum_double(int num_rows,
                 double* y,
                 double* true_result)
@@ -133,7 +140,7 @@ int main(int argc, char * argv[])
     float gflp=getFLOP(csr.nonzeros);
 
     printf("-----------------------------------------\n");
-    printf("CSR balance v3:\n");
+    printf("LSRB CSR single:\n");
 	spmv_csr_serial(&csr,cpu_result);
     gpu_time=spmv_lsrb_csr_cuda_v3(&csr,Y);
     printf("checksum=%f\n",check_sum(csr.ptrlen-1,Y,cpu_result));
@@ -142,7 +149,7 @@ int main(int argc, char * argv[])
             ,gpu_time,gb/(1.0e+6*gpu_time),gflp/(1.0e+6*gpu_time));
 #endif
     printf("-----------------------------------------\n");
-    printf("CSR balance v3 double:\n");
+    printf("LSRB CSR double:\n");
 	spmv_csr_serial_double(&csr,cpu_result_double);
     gpu_time=spmv_lsrb_csr_cuda_v3_double(&csr,Y_double);
     printf("checksum=%f\n",check_sum_double(csr.ptrlen-1,Y_double,cpu_result_double));

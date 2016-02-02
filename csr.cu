@@ -7,7 +7,9 @@ author : Lifeng Liu
 #include<time.h>
 #include"csr.h"
 #include"spmv.h"
-
+/*
+Destroy CSR object
+*/
 void destroy_csr(CSR *csr)
 {
     if(csr->ptr!=NULL)
@@ -16,7 +18,9 @@ void destroy_csr(CSR *csr)
         csr->ptr=NULL;
     }
 } 
-
+/*
+Perform SPMV based on CSR on CPU
+*/
 float spmv_csr_serial(CSR * csr, float * y)
 {
     int num_rows=csr->ptrlen-1;
@@ -51,6 +55,9 @@ float spmv_csr_serial(CSR * csr, float * y)
 }
 
 
+/*
+Perform SPMV based on CSR on CPU
+*/
 float spmv_csr_serial_double(CSR * csr, double * y)
 {
     int num_rows=csr->ptrlen-1;

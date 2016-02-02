@@ -12,6 +12,9 @@ author : Lifeng Liu
 #include "mmio.h"
 #include "spmv.h"
 
+/*
+Convert sparse matrix in COO format to CSR format
+*/
 void coo2csr(CSR * csr, COO * coo)
 {
     csr->ptrlen=coo->numrows+1;
@@ -33,6 +36,9 @@ void coo2csr(CSR * csr, COO * coo)
     }
 }
 
+/*
+Compare 2D indices
+*/
 int compare(int a1,int a2,int b1,int b2)
 {
     if(a1>b1)
@@ -48,7 +54,6 @@ int compare(int a1,int a2,int b1,int b2)
         else
             return 0;
     }
-    return 0;
 }
 void swap_entry(COO * coo,int a,int b)
 {
@@ -67,6 +72,9 @@ void swap_entry(COO * coo,int a,int b)
     coo->data[b]=tmpf;
 }
 
+/*
+Quick_sort algorithm for matrix indices
+*/
 void quick_sort(COO * coo,int start,int end)
 {
     int rand_i=rand()%(end-start)+start;
@@ -120,6 +128,9 @@ void sort_by_row_col(COO * coo)
     quick_sort(coo,0,coo->nonzeros-1);
 }
 
+/*
+Read sparse matrix in matrix market format
+*/
 void read_coo(char * filename,char *xfilename,COO * coo)
 {
     FILE *fp;

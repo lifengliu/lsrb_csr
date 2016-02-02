@@ -7,7 +7,9 @@ author : Lifeng Liu
 #include<time.h>
 #include"spmv.h"
 #include"coo.h"
-
+/*
+Destroy COO object
+*/
 void destroy_coo(COO * coo)
 {
     if(coo->rows!=NULL)

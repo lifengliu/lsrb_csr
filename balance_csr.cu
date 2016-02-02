@@ -12,6 +12,12 @@ author : Lifeng Liu
 
 #define UNIT_SIZE_B 32 
 //function declarations
+/*
+Intra warp prefix scan
+in: Input value to be scanned
+idInWarp: Thread id in warp
+return value: Scanned result
+*/
 __device__ uint32_t inwarp_scan_v3(uint32_t in,int idInWarp)
 {
     for(int i=1;i<=16;i=i*2)
@@ -21,6 +27,18 @@ __device__ uint32_t inwarp_scan_v3(uint32_t in,int idInWarp)
     }
     return in;
 }
+/*
+Do SPMV on LSRB-CSR format
+num_blocks_per_warp: number of data blocks assigned to each warp
+num_warps: total number of warps
+num_rows: number of rows in matrix
+block_base,bit_map,seg_offset: Three auxiliary  arrays of LSRB-CSR
+in: Input data
+indices: Indices array
+dev_x: Input X vector
+out: output array
+tmp_row,tmp_data: reserved for future
+*/
 __global__ void spmv_lsrb_csr_gpu_v3(int num_blocks_per_warp,
 	int num_warps,int num_rows,
 	const uint32_t * block_base, const uint32_t *bit_map, const int * seg_offset,
@@ -168,7 +186,9 @@ __global__ void spmv_lsrb_csr_gpu_v3(int num_blocks_per_warp,
 		}
 	}
 }
-
+/*
+Generate bitmap from ptr array
+*/
 __global__ void get_bit_map_seg_offset_gpu(
 			int num_data_per_block,
 			int ptrlen,
@@ -250,7 +270,9 @@ __global__ void get_bit_map_seg_offset_gpu(
 		dev_block_base[wid]=dev_block_base[wid]|0x80000000;
 	}
 }
-
+/*
+Generate segment offset from ptr array
+*/
 __global__ void get_seg_offset_gpu(
 			int num_warps,
 			int *dev_ptr,
@@ -314,7 +336,9 @@ __global__ void get_seg_offset_gpu(
 		dev_block_base[wid]=dev_block_base[wid]|0x80000000;
 	}
 }
-
+/*
+Generate block base array from ptr array
+*/
 
 __global__ void get_block_base_gpu(int num_data_per_block,
 			int ptrlen,int num_data_blocks,int *dev_ptr,
@@ -339,6 +363,9 @@ __global__ void get_block_base_gpu(int num_data_per_block,
 }
 
 
+/*
+Generate bit map array from ptr array
+*/
 __global__ void get_bit_map_gpu(int num_data_per_block,
 		int ptrlen,int *dev_ptr,
 		uint32_t *dev_bit_map)
@@ -358,8 +385,10 @@ __global__ void get_bit_map_gpu(int num_data_per_block,
 	}
 }
 
-//get the statistics of how much rows each block has
-//result stores in bins size=32 [0--32),[32--64).....
+/*
+Get the statistics of how much rows each block has
+result stores in bins size=32 [0--32),[32--64).....
+*/
 void get_rows_hist(int num_warps,uint32_t * bit_maps, int * bins)
 {
 	int num_blocks_per_warp=32;
@@ -379,7 +408,11 @@ void get_rows_hist(int num_warps,uint32_t * bit_maps, int * bins)
 		bins[sum/32]++;
 	}	
 }
-
+/*
+Wrapper function for SPMV on LSRB-CSR
+y: Output vector
+return value: time elapsed
+*/
 float spmv_lsrb_csr_cuda_v3(CSR * csr, float * y)
 {
 	//test
@@ -594,7 +627,9 @@ float spmv_lsrb_csr_cuda_v3(CSR * csr, float * y)
 }
 
 
-//------------------------------double---------------
+/*
+Atomic operation on double values
+*/
 __device__ double atomicAdd_double(double* address, double val)
 {
     unsigned long long int* address_as_ull =
@@ -609,6 +644,9 @@ __device__ double atomicAdd_double(double* address, double val)
     return __longlong_as_double(old);
 }
 
+/*
+Kernel for SPMV based on LSRB-CSR
+*/
 __global__ void spmv_lsrb_csr_gpu_v3_double(int num_blocks_per_warp,
 	int num_warps,int num_rows,
 	const uint32_t * block_base, const uint32_t *bit_map, const int * seg_offset,
@@ -757,6 +795,11 @@ __global__ void spmv_lsrb_csr_gpu_v3_double(int num_blocks_per_warp,
 	}
 }
 
+/*
+Wrapper function for SPMV on LSRB-CSR
+y: Output vector
+return value: time elapsed
+*/
 float spmv_lsrb_csr_cuda_v3_double(CSR * csr, double * y)
 {
 	//test
