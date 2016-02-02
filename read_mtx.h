@@ -1,3 +1,7 @@
+/*********************************
+Local segmented reduction based CSR
+author : Lifeng Liu
+**********************************/
 #ifndef __READ_MTX_H__
 #define __READ_MTX_H__
 #include "csr.h"

@@ -1,3 +1,7 @@
+/*********************************
+Local segmented reduction based CSR
+author : Lifeng Liu
+**********************************/
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>

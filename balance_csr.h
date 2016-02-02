@@ -1,3 +1,8 @@
+/*********************************
+Local segmented reduction based CSR
+author : Lifeng Liu
+**********************************/
+
 #ifndef __BALANCE_CSR_H__
 #define __BALANCE_CSR_H__
 

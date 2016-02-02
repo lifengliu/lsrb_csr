@@ -1,3 +1,7 @@
+/*********************************
+Local segmented reduction based CSR
+author : Lifeng Liu
+**********************************/
 #ifndef __SPMV_H__
 #define __SPMV_H__
 #include "coo.h"
