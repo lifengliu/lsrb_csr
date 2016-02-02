@@ -109,20 +109,20 @@ int main(int argc, char * argv[])
     CSR csr;
 
 
-    //default optioins
-    strcpy(xfile,"randomx.data");
-
 
     if(argc==1)
     {
         printf("usage: ./spmv [options] -f input_file \n");
         printf("options:\n");
-        printf("-x : set the file name of x vector (default randomx.data)\n");
+        printf("-x : set the file name of x vector (Random by default)\n");
         exit(0);
     }
     
     if((i=ArgPos((char*)"-f",argc,argv))>0) strcpy(inputfile,argv[i+1]);
-    if((i=ArgPos((char*)"-x",argc,argv))>0) strcpy(xfile,argv[i+1]);
+    if((i=ArgPos((char*)"-x",argc,argv))>0) 
+		strcpy(xfile,argv[i+1]);
+	else
+		xfile=NULL;
 
 	read_coo(inputfile,xfile,&coo);
     coo2csr(&csr,&coo);

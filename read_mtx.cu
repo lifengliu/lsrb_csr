@@ -234,37 +234,44 @@ void read_coo(char * filename,char *xfilename,COO * coo)
 
     fclose(fp);
     int array_rows,array_cols;
-    coo->X=(float *)malloc(coo->numcols*sizeof(float));
-    if((fp=fopen(xfilename,"r"))==NULL)
-        exit(0);
-    if (mm_read_banner(fp, &matcode) != 0)
-    {
-        printf("Could not process Matrix Market banner.\n");
-        exit(1);
-    }
-    if (mm_is_complex(matcode) && mm_is_matrix(matcode) &&
-            mm_is_sparse(matcode) )
-    {
-        printf("Sorry, this application does not support ");
-        printf("Market Market type: [%s]\n", mm_typecode_to_str(matcode));
-        exit(1);
-    }
-    if(mm_read_mtx_array_size(fp,&array_rows,&array_cols)!=0)
-        exit(1);
-    if(array_rows<coo->numcols || array_cols!=1)
-    {
-        printf("Array size too small!\n");
-        exit(1);
-    }
-    for(int i=0;i<coo->numcols;i++)
-    {
-        if(fscanf(fp,"%f\n",&coo->X[i])==0)
-        {
-            printf("reading error\n");
-            exit(0);
-        }
-    }
-    fclose(fp);
+	coo->X=(float *)malloc(coo->numcols*sizeof(float));
+	if(xfilename!=NULL){
+	    if((fp=fopen(xfilename,"r"))==NULL)
+	        exit(0);
+	    if (mm_read_banner(fp, &matcode) != 0)
+	    {
+	        printf("Could not process Matrix Market banner.\n");
+	        exit(1);
+	    }
+	    if (mm_is_complex(matcode) && mm_is_matrix(matcode) &&
+	            mm_is_sparse(matcode) )
+	    {
+	        printf("Sorry, this application does not support ");
+	        printf("Market Market type: [%s]\n", mm_typecode_to_str(matcode));
+	        exit(1);
+	    }
+	    if(mm_read_mtx_array_size(fp,&array_rows,&array_cols)!=0)
+	        exit(1);
+	    if(array_rows<coo->numcols || array_cols!=1)
+	    {
+	        printf("Array size too small!\n");
+	        exit(1);
+	    }
+	    for(int i=0;i<coo->numcols;i++)
+	    {
+	        if(fscanf(fp,"%f\n",&coo->X[i])==0)
+	        {
+	            printf("reading error\n");
+	            exit(0);
+	        }
+	    }
+	    fclose(fp);
+	}else{
+		for(int i=0;i<coo->numcols;i++)
+		{
+			coo->X[i]=double(rand())/RAND_MAX;
+		}	
+	}
     sort_by_row_col(coo);
     assert(check_sorted(coo)==true);
     //free  
